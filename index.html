@@ -1,34 +1,470 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amada Estrella ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <title>San Valentin Carta 1v</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .handwriting {
+            font-family: 'Marck Script', cursive;
+        }
+        
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f4e8d8;
+            cursor: pointer;
+            transition: all 0.6s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+        
+        .envelope.open {
+            transform: translateY(50px);
+            pointer-events: none;
+        }
+        
+        .open-me {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 15;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .envelope.open .open-me {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .hand-pointer {
+            font-size: 40px;
+            animation: pointDown 1s ease-in-out infinite;
+        }
+        
+        @keyframes pointDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        
+        .heart-button {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .close-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #d63031;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 40;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 2px solid #d63031;
+        }
+        
+        .close-button:hover {
+            background: #d63031;
+            color: white;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .close-button.show {
+            display: flex;
+        }
+        
+        .flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #e8d5c4;
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+            z-index: 10;
+        }
+        
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+        
+        .letter {
+            position: absolute;
+            width: 280px;
+            height: 180px;
+            background: linear-gradient(to bottom, #fff8f0 0%, #fffaf5 100%);
+            top: 20px;
+            left: 10px;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(0);
+            z-index: 5;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .envelope.open .letter {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            max-width: 600px;
+            height: 80vh;
+            max-height: 700px;
+            z-index: 20;
+            pointer-events: auto;
+        }
+        
+        .letter-content {
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.8s;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .envelope.open .letter-content {
+            opacity: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ff6b9d;
+            transform: rotate(45deg);
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ff6b9d;
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            left: -15px;
+        }
+        
+        .heart:after {
+            top: -15px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(-20px); }
+        }
+        
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        .verse {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-left: 4px solid #d63031;
+            font-style: italic;
+        }
+        
+        .scroll-content {
+            scrollbar-width: thin;
+            scrollbar-color: #d4af37 transparent;
+        }
+        
+        .scroll-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scroll-content::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 3px;
+        }
+
+        .ring {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #ffd700;
+            border-radius: 50%;
+            position: relative;
+            animation: ringGlow 2s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        .ring:before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff69b4;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px #ff69b4;
+        }
+
+        @keyframes ringGlow {
+            0%, 100% { box-shadow: 0 0 20px #ffd700; }
+            50% { box-shadow: 0 0 40px #ffd700; }
+        }
+
+        .proposal-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #d63031;
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
 </head>
-<body>
-    <h1>¡Feliz San Valentín! ❤️</h1>
-    <div class="contenedor">
-        <div class="envoltura-sobre">
-            <div class="sobre">
-                <div class="carta">
-                    <div class="contenido">
-                        <strong>Querida Estrella</strong>
-                        <p>
-                            Hoy es <strong>San Valentín</strong>, el día oficial de los <em>corazones</em>, el <em>chocolate</em> y las declaraciones de amor dramáticas (como en las telenovelas). Así que prepárate, porque aquí va la mía: Desde que te conocí, mi corazón late más rápido que <code>WiFi</code> gratis en una plaza pública. Eres más brillante que un mensaje de "<strong>te amo</strong>" en <strong>LED gigante</strong> y más dulce que el doble de caramelo en un café con extra de crema. Si fueras un algoritmo, serías el más eficiente: optimizas mi felicidad con la menor cantidad de esfuerzo. Si fueras un bug, serías el único que no querría corregir. Y si fueras una aplicación, serías la que siempre tengo anclada en mi pantalla principal. Gracias por hacer de mi vida una versión mejorada, sin errores (bueno, quizá con algunos, pero todos adorables). <br> <strong>Feliz San Valentín</strong>, mi <em>estrella favorita</em>. <br> Con mucho <strong>código</strong> (y <strong>amor</strong>), <br> Tu programador enamorado. <br> <span style="font-size: 0.9em; color: grey;">PD: Si esta carta fuera un programa, su salida sería:</span> <br> <code>"Eres lo mejor que me ha pasado."</code>
+<body class="flex items-center justify-center p-4">
+    <!-- Partículas flotantes -->
+    <div id="particles"></div>
+
+    <!-- Título -->
+    <div class="absolute top-8 text-center w-full z-30">
+        <h1 class="handwriting text-5xl md:text-6xl text-white drop-shadow-lg animate-pulse">
+            Para Mi Amada Estrella ✨
+        </h1>
+        <p class="text-white text-lg mt-2 opacity-80">Haz click en el sobre...</p>
+    </div>
+
+    <!-- Botón de cerrar -->
+    <div class="close-button" id="closeButton">✕</div>
+
+    <!-- Contenedor del sobre -->
+    <div class="envelope-wrapper">
+        <div class="envelope" id="envelope">
+            <!-- Indicador "Abreme" -->
+            <div class="open-me">
+                <div class="hand-pointer">👇</div>
+                <div class="heart-button">❤️ ÁBREME ❤️</div>
+            </div>
+            <div class="flap"></div>
+            <div class="letter">
+                <div class="letter-content scroll-content">
+                    <div class="text-center mb-4">
+                        <h2 class="handwriting text-3xl text-pink-600 mb-2">Mi Amada Estrella</h2>
+                        <div class="text-gray-500 text-sm">San Valentín 2025</div>
+                    </div>
+
+                    <div class="space-y-4 text-gray-800 text-justify">
+                        <p class="first-letter:text-4xl first-letter:font-bold first-letter:text-pink-600 first-letter:mr-1 text-base">
+                            Ya son casi 5 años desde que comenzó nuestra historia, ese día inolvidable en el parque Los Sarrapios donde te declaré mi amor y aceptaste. Fue el momento de mayor felicidad en mi vida, cuando escuché tu "sí" y vi en tus ojos el reflejo del amor que Dios había preparado para nosotros.
                         </p>
+
+                        <p class="text-base">
+                            Desde aquel día, cada momento a tu lado ha sido una bendición. Hoy, en Cristo Jesús estamos unidos, buscando juntos Su amor infinito, caminando en Su voluntad y construyendo sobre la roca firme que es nuestra fe.
+                        </p>
+
+                        <div class="verse p-3 rounded my-4">
+                            <p class="font-semibold mb-2 text-sm">📖 Eclesiastés 4:9-12</p>
+                            <p class="text-sm">"Más valen dos que uno, porque obtienen más fruto de su esfuerzo. Si caen, el uno levanta al otro. Mejor son dos que uno; porque tienen mejor paga de su trabajo."</p>
+                        </div>
+
+                        <p class="text-base">
+                            Mi amor, eres mi compañera, mi mejor amiga, mi consuelo en los días difíciles y mi alegría en los momentos de celebración. Contigo he aprendido el verdadero significado del amor que se entrega, que sirve, que perdona y que crece cada día.
+                        </p>
+
+                        <div class="verse p-3 rounded my-4">
+                            <p class="font-semibold mb-2 text-sm">📖 1 Corintios 13:4-7</p>
+                            <p class="text-sm">"El amor es paciente, es bondadoso. El amor no es envidioso ni jactancioso ni orgulloso. No se comporta con rudeza, no es egoísta, no se enoja fácilmente, no guarda rencor."</p>
+                        </div>
+
+                        <p class="text-base">
+                            Estos años han sido solo el comienzo de la hermosa historia que Dios ha escrito para nosotros. Y ahora, con mi corazón lleno de amor y con la certeza de que es la voluntad de Dios, quiero darte el siguiente paso.
+                        </p>
+
+                        <div class="verse p-3 rounded my-4">
+                            <p class="font-semibold mb-2 text-sm">📖 Proverbios 18:22</p>
+                            <p class="text-sm">"El que encuentra esposa encuentra la felicidad: muestras de su favor le ha dado el Señor."</p>
+                        </div>
+
+                        <!-- Propuesta de matrimonio -->
+                        <div class="my-6 p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg border-2 border-pink-300">
+                            <div class="ring mb-3"></div>
+                            <p class="proposal-text handwriting mb-3 text-2xl">
+                                ¿Quieres casarte conmigo?
+                            </p>
+                            <p class="text-center text-base">
+                                Quiero pasar el resto de mi vida amándote, honrándote y sirviendo a Dios junto a ti. Quiero que seas mi esposa, mi compañera para toda la vida, en lo próspero y en lo adverso, en la salud y en la enfermedad, hasta que la muerte nos separe.
+                            </p>
+                        </div>
+
+                        <div class="verse p-3 rounded my-4">
+                            <p class="font-semibold mb-2 text-sm">📖 Génesis 2:24</p>
+                            <p class="text-sm">"Por eso el hombre deja a su padre y a su madre, y se une a su mujer, y los dos se funden en un solo ser."</p>
+                        </div>
+
+                        <p class="text-base">
+                            Prometo amarte como Cristo amó a la iglesia, cuidarte, protegerte y buscar siempre tu felicidad. Prometo caminar contigo en fe, crecer juntos en el amor de Dios y construir un hogar lleno de Su presencia.
+                        </p>
+
+                        <div class="verse p-3 rounded my-4">
+                            <p class="font-semibold mb-2 text-sm">📖 Colosenses 3:14</p>
+                            <p class="text-sm">"Por encima de todo, vístanse de amor, que es el vínculo perfecto."</p>
+                        </div>
+
+                        <div class="text-center mt-6 mb-4">
+                            <p class="handwriting text-2xl text-pink-600">Con todo mi amor,</p>
+                            <p class="handwriting text-3xl text-purple-600 mt-2">Tu futuro esposo 💕</p>
+                            <p class="text-sm text-gray-500 mt-3">San Valentín 2025</p>
+                        </div>
+
+                        <div class="text-center text-sm text-gray-400 italic mt-4 pb-4">
+                            "Que el Señor bendiga nuestra unión y nos guíe en este nuevo capítulo de amor eterno"
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="corazon"></div>
-            <div class="solapa-derecha"></div>
-            <div class="solapa-izquierda"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-pink-200 to-transparent"></div>
         </div>
     </div>
-    <!-- <script src="script_v2.js"></script> -->
-     <script src="script_v2.js"></script>
+
+    <!-- Audio -->
+    <audio id="musicPlayer" loop>
+        <source src="./assets/my-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const closeButton = document.getElementById('closeButton');
+        const musicPlayer = document.getElementById('musicPlayer');
+        let isOpen = false;
+
+        // Crear partículas flotantes (corazones y estrellas)
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 20; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 3 + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.2;
+            particlesContainer.appendChild(heart);
+
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            particlesContainer.appendChild(sparkle);
+        }
+
+        // Abrir carta
+        envelope.addEventListener('click', function() {
+            if (!isOpen) {
+                envelope.classList.add('open');
+                closeButton.classList.add('show');
+                isOpen = true;
+                
+                // Reproducir música
+                musicPlayer.play().catch(e => {
+                    console.log("Autoplay bloqueado, se requiere interacción del usuario");
+                });
+
+                // Crear más partículas al abrir
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('div');
+                        sparkle.className = 'sparkle';
+                        sparkle.style.left = '50%';
+                        sparkle.style.top = '50%';
+                        sparkle.style.animation = `sparkle 1s ease-out forwards`;
+                        document.body.appendChild(sparkle);
+                        
+                        const angle = (Math.PI * 2 * i) / 30;
+                        const distance = 100 + Math.random() * 200;
+                        const x = Math.cos(angle) * distance;
+                        const y = Math.sin(angle) * distance;
+                        
+                        setTimeout(() => {
+                            sparkle.style.transform = `translate(${x}px, ${y}px)`;
+                        }, 10);
+                        
+                        setTimeout(() => {
+                            sparkle.remove();
+                        }, 1000);
+                    }, i * 20);
+                }
+            }
+        });
+
+        // Cerrar carta
+        closeButton.addEventListener('click', function() {
+            if (isOpen) {
+                envelope.classList.remove('open');
+                closeButton.classList.remove('show');
+                isOpen = false;
+                
+                // Pausar música
+                musicPlayer.pause();
+            }
+        });
+    </script>
 </body>
 </html>
